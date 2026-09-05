@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { getProductBySlugFromDb, deductVariantStock } from "@/lib/products-db";
 import { successResponse, errorResponse } from "@/lib/api-response";
 import {
   checkRateLimit,
@@ -6,6 +6,8 @@ import {
   isValidIndianPan,
   isValidIndianPhone,
 } from "@/lib/security";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
@@ -45,13 +47,7 @@ export async function POST(request: Request) {
       return errorResponse("Invalid 10-digit Indian mobile number", 400, "INVALID_PHONE");
     }
 
-    const product = await prisma.product.findUnique({
-      where: { id: cleanProductId },
-      include: {
-        variants: true,
-        emiPlans: true,
-      },
-    });
+    const product = await getProductBySlugFromDb(cleanProductId);
 
     if (!product) {
       return errorResponse("Specified product does not exist", 404, "PRODUCT_NOT_FOUND");
@@ -71,15 +67,9 @@ export async function POST(request: Request) {
       return errorResponse("This product variant is currently out of stock", 400, "OUT_OF_STOCK");
     }
 
-    // Atomically decrement stock in database
-    const updatedVariant = await prisma.productVariant.update({
-      where: { id: cleanVariantId },
-      data: {
-        stockQuantity: {
-          decrement: 1,
-        },
-      },
-    });
+    // Atomically decrement stock in database / memory
+    const stockResult = await deductVariantStock(cleanVariantId);
+    const remainingStock = stockResult ? stockResult.remainingStock : Math.max(0, variant.stockQuantity - 1);
 
     const orderId = "1FI-" + Math.random().toString(36).substring(2, 9).toUpperCase();
     const pledgeRef = "MF-" + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -91,8 +81,8 @@ export async function POST(request: Request) {
       status: "PLEDGE_APPROVED",
       productName: product.name,
       variant: `${variant.colorName} • ${variant.storage}`,
-      variantId: updatedVariant.id,
-      remainingStock: updatedVariant.stockQuantity,
+      variantId: variant.id,
+      remainingStock,
       loanAmount: variant.price,
       monthlyEmi: emiPlan.monthlyAmount,
       tenureMonths: emiPlan.tenureMonths,

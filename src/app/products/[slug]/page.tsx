@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
+import { getProductBySlugFromDb } from "@/lib/products-db";
 import ProductDetail from "@/components/ProductDetail";
 
 export const dynamic = "force-dynamic";
@@ -15,11 +15,7 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = params;
-  const product = await prisma.product.findFirst({
-    where: {
-      OR: [{ slug: slug }, { id: slug }],
-    },
-  });
+  const product = await getProductBySlugFromDb(slug);
 
   if (!product) {
     return {
@@ -35,20 +31,7 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = params;
-
-  const product = await prisma.product.findFirst({
-    where: {
-      OR: [{ slug: slug }, { id: slug }],
-    },
-    include: {
-      variants: {
-        orderBy: { price: "asc" },
-      },
-      emiPlans: {
-        orderBy: { tenureMonths: "asc" },
-      },
-    },
-  });
+  const product = await getProductBySlugFromDb(slug);
 
   if (!product) {
     notFound();

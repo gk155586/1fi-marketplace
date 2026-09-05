@@ -1,6 +1,8 @@
-import { prisma } from "@/lib/prisma";
+﻿import { getProductBySlugFromDb } from "@/lib/products-db";
 import { successResponse, errorResponse } from "@/lib/api-response";
 import { sanitizeString } from "@/lib/security";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   request: Request,
@@ -17,17 +19,7 @@ export async function GET(
     const variantIdParam = searchParams.get("variantId");
     const customPriceParam = searchParams.get("price");
 
-    const product = await prisma.product.findFirst({
-      where: {
-        OR: [{ slug }, { id: slug }],
-      },
-      include: {
-        variants: true,
-        emiPlans: {
-          orderBy: { tenureMonths: "asc" },
-        },
-      },
-    });
+    const product = await getProductBySlugFromDb(slug);
 
     if (!product) {
       return errorResponse("Product not found", 404, "PRODUCT_NOT_FOUND");

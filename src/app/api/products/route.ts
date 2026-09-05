@@ -1,6 +1,8 @@
-import { prisma } from "@/lib/prisma";
+﻿import { getAllProductsFromDb } from "@/lib/products-db";
 import { successResponse, errorResponse } from "@/lib/api-response";
 import { sanitizeString } from "@/lib/security";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
@@ -11,31 +13,11 @@ export async function GET(request: Request) {
     const category = categoryParam ? sanitizeString(categoryParam, 32) : null;
     const search = searchParam ? sanitizeString(searchParam, 64) : null;
 
-    const where: any = {};
-    if (category) where.category = category;
-    if (search) {
-      where.OR = [
-        { name: { contains: search } },
-        { brand: { contains: search } },
-        { description: { contains: search } },
-      ];
-    }
-
-    const products = await prisma.product.findMany({
-      where,
-      include: {
-        variants: {
-          orderBy: { price: "asc" },
-        },
-        emiPlans: {
-          orderBy: { tenureMonths: "asc" },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const products = await getAllProductsFromDb({ category, search });
 
     return successResponse(products);
   } catch (error) {
+    console.error("Catalog API error:", error);
     return errorResponse("Internal server error while retrieving catalog", 500, "DATABASE_ERROR");
   }
 }

@@ -1,4 +1,4 @@
-export interface ProductVariant {
+﻿export interface ProductVariant {
   id: string;
   productId: string;
   colorName: string;
@@ -10,6 +10,7 @@ export interface ProductVariant {
   galleryImages?: string;
   stockQuantity: number;
   isDefault: boolean;
+  createdAt?: string | Date;
 }
 
 export interface EmiPlan {
@@ -21,6 +22,7 @@ export interface EmiPlan {
   cashbackAmount: number;
   isZeroInterest: boolean;
   minMfPledge: number;
+  createdAt?: string | Date;
 }
 
 export interface Product {
@@ -35,6 +37,8 @@ export interface Product {
   reviewCount: number;
   variants: ProductVariant[];
   emiPlans: EmiPlan[];
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface ApiResponse<T> {
