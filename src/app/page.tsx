@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
+import { FALLBACK_PRODUCTS } from "@/lib/catalog-data";
 import ShopTabSwitcher, { ShopTab } from "@/components/ShopTabSwitcher";
 import TopBrandsSection from "@/components/TopBrandsSection";
 import NearbyStoresSection from "@/components/NearbyStoresSection";
@@ -36,8 +37,8 @@ function ShopHomeContent() {
   // Shop Sub-Tab State: Top Brands | Nearby Stores | 1Fi Marketplace
   const [activeShopTab, setActiveShopTab] = useState<ShopTab>("marketplace");
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS || []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // If a category param is passed, switch directly to Marketplace
   useEffect(() => {
@@ -76,17 +77,17 @@ function ShopHomeContent() {
 
   useEffect(() => {
     async function fetchCatalog() {
-      setIsLoading(true);
       try {
         const res = await fetch("/api/products");
-        const json = await res.json();
-        // Unpack { success: true, data: [...] } or array directly
-        const items = Array.isArray(json) ? json : json.data || [];
-        setProducts(items);
+        if (res.ok) {
+          const json = await res.json();
+          const items = Array.isArray(json) ? json : json.data || [];
+          if (items && items.length > 0) {
+            setProducts(items);
+          }
+        }
       } catch (err) {
-        console.error("Failed to load catalog products", err);
-      } finally {
-        setIsLoading(false);
+        console.warn("Background catalog refresh notice:", err);
       }
     }
     fetchCatalog();
