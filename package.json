@@ -1,38 +1,38 @@
-﻿{
-    "name":  "1fi-assignment",
-    "version":  "0.1.0",
-    "private":  true,
-    "scripts":  {
-                    "dev":  "next dev",
-                    "build":  "prisma generate \u0026\u0026 next build",
-                    "start":  "next start",
-                    "lint":  "next lint",
-                    "db:push":  "prisma db push",
-                    "db:seed":  "tsx prisma/seed.ts",
-                    "db:studio":  "prisma studio",
-                    "postinstall":  "prisma generate"
-                },
-    "dependencies":  {
-                         "@prisma/client":  "^5.20.0",
-                         "clsx":  "^2.1.1",
-                         "lucide-react":  "^0.441.0",
-                         "next":  "14.2.15",
-                         "react":  "^18.3.1",
-                         "react-dom":  "^18.3.1",
-                         "sharp":  "^0.35.4",
-                         "tailwind-merge":  "^2.5.2",
-                         "three":  "^0.185.1"
-                     },
-    "devDependencies":  {
-                            "@types/node":  "^20.16.5",
-                            "@types/react":  "^18.3.8",
-                            "@types/react-dom":  "^18.3.0",
-                            "@types/three":  "^0.185.4",
-                            "autoprefixer":  "^10.4.20",
-                            "postcss":  "^8.4.47",
-                            "prisma":  "^5.20.0",
-                            "tailwindcss":  "^3.4.13",
-                            "tsx":  "^4.19.1",
-                            "typescript":  "^5.6.2"
-                        }
+{
+  "name": "1fi-assignment",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.441.0",
+    "next": "14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.35.4",
+    "tailwind-merge": "^2.5.2",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.5",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.185.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "prisma": "^5.20.0",
+    "tailwindcss": "^3.4.13",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
 }
