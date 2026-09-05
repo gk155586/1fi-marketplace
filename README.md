@@ -158,19 +158,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 2–5 Minute Video Walkthrough Outline
-
-1. **Introduction (30s)**:
-   - Introduce yourself and state this is the technical submission for 1Fi SDE1.
-   - Explain the 1Fi concept: "0% interest EMI backed by your existing mutual fund portfolio instead of traditional credit score checks."
-2. **Frontend UI Demo (1m 30s)**:
-   - Navigate to `/` and demonstrate category filtering (**Mobiles**, **Electronics**, **Deals**).
-   - Open `/products/iphone-17-pro`.
-   - Click through the **vertical multi-image gallery** (Front, 45°, Rear Camera, Profile).
-   - Switch color finishes and storage sizes (`256GB`, `512GB`, `1TB`) to demonstrate live price and EMI recalculation.
-   - Show the **Hardware Architecture / Exploded Ingredients Breakdown**.
-   - Select an EMI plan and click **"Buy on 6 months EMI"** to demonstrate the mutual fund lien checkout modal.
-3. **Backend & Architecture Review (1m)**:
-   - Walk through `prisma/schema.prisma` (`Product`, `ProductVariant`, `EmiPlan`).
-   - Showcase API endpoints (`/api/products`, `/api/products/:slug`, `/api/products/:slug/emi`, `/api/orders/simulate`).
-   - Highlight clean validation, integer precision monetary safety, and relational integrity checking.
