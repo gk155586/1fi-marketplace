@@ -174,3 +174,5 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
    - Walk through `prisma/schema.prisma` (`Product`, `ProductVariant`, `EmiPlan`).
    - Showcase API endpoints (`/api/products`, `/api/products/:slug`, `/api/products/:slug/emi`, `/api/orders/simulate`).
    - Highlight clean validation, integer precision monetary safety, and relational integrity checking.
+
+<!-- vercel trigger -->
